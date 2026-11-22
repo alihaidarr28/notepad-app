@@ -1,7 +1,15 @@
 /** @format */
 
-import "dotenv/config";
+import { config } from "dotenv";
 import pg from "pg";
+config({
+	path: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+	quiet: true,
+});
+
+if (process.env.NODE_ENV === "test" && process.env.DB_NAME !== "notepad_test") {
+	throw new Error("Tests must connect to notepad_test!");
+}
 
 const { Pool } = pg;
 
